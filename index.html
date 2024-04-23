@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timer Calculator</title>
+    <style>
+      /* General styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: gainsboro;
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo {
+        height: 125px;
+      }
+
+      .logo:hover {
+        opacity: 0.7;
+      }
+
+      main {
+        display: flex;
+        justify-content: space-around;
+        padding: 20px;
+      }
+
+      .calculator {
+        border: 2px solid #333;
+        border-radius: 10px;
+        padding: 20px;
+        width: 300px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .calculator:hover {
+        transform: translateY(-5px);
+      }
+
+      .calculator h2 {
+        text-align: center;
+      }
+
+      .input-fields {
+        margin-bottom: 20px;
+      }
+
+      .input-fields label {
+        display: block;
+        margin-bottom: 5px;
+        margin-top: 10px;
+      }
+
+      .input-fields input {
+        width: calc(100% - 12px);
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+      }
+
+      .buttons button {
+        padding: 8px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      .buttons button:hover {
+        background-color: #0056b3;
+      }
+
+      .output {
+        border-top: 2px solid #333;
+        padding-top: 20px;
+      }
+
+      .output h3 {
+        margin-top: 0;
+      }
+
+      footer {
+        background-color: #333;
+        color: grey;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .envelope {
+        background-color: gainsboro;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .professor-details,
+      .student-details {
+        margin-top: 20px;
+      }
+
+      .professor-details h2,
+      .student-details h2 {
+        text-align: center;
+      }
+
+      .professor-details ul,
+      .student-details ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .professor-details ul li,
+      .student-details ul li {
+        margin-bottom: 5px;
+      }
+
+      .eff {
+        position: relative;
+        color: #000;
+        text-decoration: none;
+      }
+
+      .eff:hover {
+        color: #000;
+      }
+
+      .eff::before {
+        content: "";
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #000;
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+
+      .eff:hover::before {
+        transform: scaleX(1);
+      }
+
+      /* Media queries for responsiveness */
+      @media screen and (max-width: 768px) {
+        main {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .calculator {
+          width: 80%;
+          margin-bottom: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <a href="https://www.vit.ac.in/" target="_blank">
+          <img class="logo" src="vit l2.png" alt="VIT Logo" />
+        </a>
+      </div>
+    </header>
+    <main>
+      <div class="calculator" id="calculator1">
+        <h2>Calculator 1</h2>
+        <div class="input-fields">
+          <label for="waveFrequency1">Wave Frequency (Hz):</label>
+          <input
+            type="number"
+            id="waveFrequency1"
+            placeholder="Enter frequency"
+          />
+        </div>
+        <div class="buttons">
+          <button onclick="calculateMode1()">Mode 1</button>
+          <button onclick="calculateMode2()">Mode 2</button>
+        </div>
+        <div class="output">
+          <h3>Output:</h3>
+          <p>TH Value: <span id="THValue1"></span></p>
+          <p>TL Value: <span id="TLValue1"></span></p>
+        </div>
+      </div>
+      <div class="calculator" id="calculator3">
+        <h2>TMOD Calculator</h2>
+        <div class="input-fields">
+          <label for="tmodValue">TMOD Value (Hexadecimal):</label>
+          <input type="text" id="tmodValue" placeholder="Enter TMOD value" />
+        </div>
+        <div class="buttons">
+          <button onclick="calculateTMOD()">Calculate</button>
+        </div>
+        <div class="output">
+          <h3>Output:</h3>
+          <p id="tmodDescription"></p>
+          <p id="binaryOutput"></p>
+        </div>
+      </div>
+      <div class="calculator" id="calculator2">
+        <h2>Calculator 2</h2>
+        <div class="input-fields">
+          <label for="THValue3">TH Value (Hexadecimal):</label>
+          <input type="text" id="THValue3" placeholder="Enter TH value" />
+          <label for="TLValue3">TL Value (Hexadecimal): </label>
+          <input type="text" id="TLValue3" placeholder="Enter TL value" />
+        </div>
+        <div class="buttons">
+          <button onclick="reverseCalculateMode1()">Mode 1</button>
+          <button onclick="reverseCalculateMode2()">Mode 2</button>
+        </div>
+        <div class="output">
+          <h3>Output:</h3>
+          <p>Time Delay: <span id="timeDelay3"></span> seconds</p>
+          <p>Wave Frequency: <span id="waveFrequency3"></span> Hz</p>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="envelope">
+        <div class="professor-details">
+          <h2 class="eff">Professor</h2>
+          <ul>
+            <li><strong>Name:</strong> Dr. DHANABAL R</li>
+            <li>
+              <strong>Designation:</strong> Assistant Professor Sr. Grade 1
+            </li>
+            <li>
+              <strong>Department:</strong> Department of Micro and
+              Nanoelectronics
+            </li>
+            <li>
+              <strong>School / Centre:</strong> School of Electronics
+              Engineering
+            </li>
+            <li><strong>E-Mail Id:</strong> rdhanabal@vit.ac.in</li>
+            <li><strong>Cabin Number:</strong> TT-238</li>
+          </ul>
+        </div>
+        <div class="student-details">
+          <h2 class="eff">Student</h2>
+          <ul>
+            <li><strong>Registration Number:</strong> 21BEC0079</li>
+            <li><strong>Name:</strong> CHETAN KUMAR VERMA</li>
+            <li>
+              <strong>Email:</strong> chetankumar.verma2021@vitstudent.ac.in
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <script>
+      function calculateMode1() {
+        // Implementation for Calculator 1 - Mode 1
+        const waveFrequency = parseFloat(
+          document.getElementById("waveFrequency1").value
+        );
+        const XTAL = 11.0592e6; // XTAL frequency in Hz
+
+        // Calculate the time period of the wave
+        const T = 1 / waveFrequency;
+
+        // Calculate the time for half of the pulse (high and low)
+        const halfPeriod = T / 2;
+
+        // Calculate the value to be subtracted from 65536
+        const C = Math.floor(halfPeriod / 0.000001085);
+
+        // Calculate TH and TL values
+        const B = 65536 - C;
+        const hexB = B.toString(16).toUpperCase().padStart(4, "0"); // Pad to ensure 4 digits
+        const THValue = hexB.slice(0, 2);
+        const TLValue = hexB.slice(2);
+
+        document.getElementById("THValue1").textContent = THValue + "H";
+        document.getElementById("TLValue1").textContent = TLValue + "H";
+      }
+
+      function calculateMode2() {
+        // Implementation for Calculator 1 - Mode 2
+        const waveFrequency = parseFloat(
+          document.getElementById("waveFrequency1").value
+        );
+        const XTAL = 11.0592e6; // XTAL frequency in Hz
+
+        // Calculate the time period of the wave
+        const T = 1 / waveFrequency;
+
+        // Calculate the time for the complete period
+        const halfperiodMicro = T / 2;
+
+        // Calculate the number of counts for a complete period
+        const counts = Math.floor(halfperiodMicro / 0.000001085);
+
+        // Calculate the TH value
+        const TH = 256 - counts;
+        const hexTH = TH.toString(16).toUpperCase().padStart(2, "0"); // Pad to ensure 2 digits
+
+        document.getElementById("THValue1").textContent = hexTH;
+        document.getElementById("TLValue1").textContent = ""; // Clear TL value
+      }
+
+      function reverseCalculateMode1() {
+        // Implementation for Calculator 2 - Mode 1
+        const THHexString = document.getElementById("THValue3").value;
+        const TLHexString = document.getElementById("TLValue3").value;
+
+        // Convert hexadecimal strings to decimal
+        const THDecimal = parseInt(THHexString, 16);
+        const TLDecimal = parseInt(TLHexString, 16);
+
+        // Calculate the combined value B
+        const B = THDecimal * 256 + TLDecimal;
+
+        // Calculate clocks
+        const clocks = 65536 - B;
+
+        // Calculate time delay in seconds
+        const timeDelay = (clocks * 1.085) / 1000000; // Convert microseconds to seconds
+
+        // Calculate wave frequency in Hertz
+        const waveFrequency = 1 / (2 * timeDelay);
+
+        // Update the output fields
+        document.getElementById("timeDelay3").textContent =
+          timeDelay.toFixed(4);
+        document.getElementById("waveFrequency3").textContent =
+          waveFrequency.toFixed(2);
+      }
+
+      function reverseCalculateMode2() {
+        // Implementation for Calculator 2 - Mode 2
+        const THHexString = document.getElementById("THValue3").value;
+        const TLHexString = document.getElementById("TLValue3").value;
+
+        // Convert hexadecimal strings to decimal
+        const THDecimal = parseInt(THHexString, 16);
+        const TLDecimal = parseInt(TLHexString, 16);
+
+        // Calculate the combined value B
+        const B = THDecimal * 256 + TLDecimal;
+
+        // Calculate clocks
+        const clocks = 256 - THDecimal;
+
+        // Calculate time delay in seconds
+        const timeDelay = (clocks * 1.085) / 1000000; // Convert microseconds to seconds
+
+        // Calculate wave frequency in Hertz
+        const waveFrequency = 1 / (2 * timeDelay);
+
+        // Update the output fields
+        document.getElementById("timeDelay3").textContent =
+          timeDelay.toFixed(4);
+        document.getElementById("waveFrequency3").textContent =
+          waveFrequency.toFixed(2);
+      }
+
+      function calculateTMOD() {
+        const tmodValue = document.getElementById("tmodValue").value;
+        const binaryEquivalent = parseInt(tmodValue, 16)
+          .toString(2)
+          .padStart(8, "0");
+        const bitNames = [
+          "Gate Timer1 (GATE1)",
+          "C/T Timer1 (C/T1)",
+          "Mode1 Timer1 (M1)",
+          "Mode0 Timer1 (M0)",
+          "Gate Timer0 (GATE0)",
+          "C/T Timer0 (C/T0)",
+          "Mode1 Timer0 (M1)",
+          "Mode0 Timer0 (M0)",
+        ];
+
+        const mode1Timer1 =
+          binaryEquivalent[3] === "1" ? "mode 1 of Timer 1 " : "";
+        const mode1Timer0 =
+          binaryEquivalent[7] === "1" ? "mode 1 of Timer 0 " : "";
+
+        const mode2Timer1 =
+          binaryEquivalent[2] === "1" ? "mode 2 of Timer 1 " : "";
+        const mode2Timer0 =
+          binaryEquivalent[6] === "1" ? "mode 2 of Timer 0 " : "";
+
+        const timerModeDescription =
+          mode1Timer1 + mode1Timer0 + mode2Timer1 + mode2Timer0;
+
+        document.getElementById(
+          "tmodDescription"
+        ).textContent = `For TMOD = 0x${tmodValue}, ${timerModeDescription} is selected.`;
+
+        let output = "<pre>TMOD Register (8 bits)\n\n";
+        output += "7   6   5   4   3   2   1   0\n";
+        output += "+---+---+---+---+---+---+---+\n";
+        for (let i = 0; i < 8; i++) {
+          output += `|   ${bitNames[i].padEnd(19)} `;
+          output += binaryEquivalent[i] === "1" ? "| 1 |\n" : "| 0 |\n";
+        }
+        output += "+---+---+---+---+---+---+---+</pre>";
+        document.getElementById("binaryOutput").innerHTML = output;
+      }
+    </script>
+  </body>
+</html>
