@@ -276,30 +276,43 @@
       </div>
     </footer>
     <script>
-      function calculateMode1() {
+      
+
+       function calculateMode1() {
         // Implementation for Calculator 1 - Mode 1
         const waveFrequency = parseFloat(
           document.getElementById("waveFrequency1").value
         );
-        const XTAL = 11.0592e6; // XTAL frequency in Hz
 
-        // Calculate the time period of the wave
-        const T = 1 / waveFrequency;
+        // Calculate time delay in seconds
+        const timeDelay = 1 / (2 * waveFrequency);
 
-        // Calculate the time for half of the pulse (high and low)
-        const halfPeriod = T / 2;
+        // Calculate clocks
+        let clocks = Math.round((timeDelay * 1000000) / 1.085); // Convert seconds to microseconds
 
-        // Calculate the value to be subtracted from 65536
-        const C = Math.floor(halfPeriod / 0.000001085);
+        // Ensure TL is an even number
+        if (clocks % 2 !== 0) {
+          clocks++;
+        }
 
-        // Calculate TH and TL values
-        const B = 65536 - C;
-        const hexB = B.toString(16).toUpperCase().padStart(4, "0"); // Pad to ensure 4 digits
-        const THValue = hexB.slice(0, 2);
-        const TLValue = hexB.slice(2);
+        // Calculate B value
+        const B = 65536 - clocks;
 
-        document.getElementById("THValue1").textContent = THValue + "H";
-        document.getElementById("TLValue1").textContent = TLValue + "H";
+        // Extract TH and TL values
+        const THDecimal = Math.floor(B / 256);
+        const TLDecimal = B % 256;
+
+        // Convert TH and TL to hexadecimal strings
+        const THHexString = THDecimal.toString(16)
+          .toUpperCase()
+          .padStart(2, "0");
+        const TLHexString = TLDecimal.toString(16)
+          .toUpperCase()
+          .padStart(2, "0");
+
+        // Update the output fields
+        document.getElementById("THValue1").textContent = THHexString + "H";
+        document.getElementById("TLValue1").textContent = TLHexString + "H";
       }
 
       function calculateMode2() {
